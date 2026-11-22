@@ -1,6 +1,6 @@
 """HTTP API."""
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timezone
 from functools import wraps
 
 from flask import Blueprint, current_app, g, jsonify, request
@@ -133,7 +133,7 @@ def create_task():
         "INSERT INTO tasks (owner_id, title, slug, status, priority, due_date, created_at)"
         " VALUES (?, ?, ?, ?, ?, ?, ?)",
         (g.user_id, title.strip(), slugify(title), status, priority, due_date,
-         datetime.now().isoformat()),
+         datetime.now(timezone.utc).isoformat()),
     )
     db.commit()
     invalidate_stats()
