@@ -75,7 +75,7 @@ def register():
     try:
         db.execute(
             "INSERT INTO users (username, password_hash) VALUES (?, ?)",
-            (username, hash_password(password)),
+            (username.lower(), hash_password(password)),
         )
         db.commit()
     except sqlite3.IntegrityError:
@@ -91,7 +91,7 @@ def login():
     if not isinstance(username, str) or not isinstance(password, str):
         return error("invalid credentials", 401)
     row = get_db().execute(
-        "SELECT id, password_hash FROM users WHERE username = ?", (username,)
+        "SELECT id, password_hash FROM users WHERE username = ?", (username.lower(),)
     ).fetchone()
     if row is None:
         return error("unknown user", 404)
