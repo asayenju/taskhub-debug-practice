@@ -46,7 +46,7 @@ def task_to_dict(row):
 
 
 def valid_priority(value):
-    return isinstance(value, int) and 0 <= value <= 5
+    return isinstance(value, int) and 0 <= value <= 5 and not isinstance(value, bool)
 
 
 def invalidate_stats():
@@ -116,6 +116,7 @@ def create_task():
     if not isinstance(title, str) or not title.strip():
         return error("title required", 400)
     priority = data.get("priority", 1)
+    print(priority)
     if not valid_priority(priority):
         return error("priority must be an integer from 0 to 5", 400)
     status = data.get("status", "todo")
