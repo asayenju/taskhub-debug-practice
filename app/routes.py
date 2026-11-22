@@ -93,9 +93,7 @@ def login():
     row = get_db().execute(
         "SELECT id, password_hash FROM users WHERE username = ?", (username.lower(),)
     ).fetchone()
-    if row is None:
-        return error("unknown user", 404)
-    if not verify_password(password, row["password_hash"]):
+    if row is None or not verify_password(password, row["password_hash"]):
         return error("wrong password", 401)
     return jsonify(token=current_app.tokens.issue(row["id"]))
 
