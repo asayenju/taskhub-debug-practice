@@ -163,7 +163,7 @@ def list_tasks():
     if q:
         # SQL injection prevented by first compiling the SQL logic then safely inserting the string into the logic
         sql += f" AND title LIKE ?"
-        params.append(f"%{q}%")
+        params.append(f"%{q}%") # Made sure the like statement looks at q and sees if there is something like q in the title
     sql += " ORDER BY created_at DESC, id DESC"
 
     rows = get_db().execute(sql, params).fetchall()
