@@ -50,7 +50,7 @@ def valid_priority(value):
 
 
 def invalidate_stats():
-    current_app.cache.invalidate("stats")
+    current_app.cache.invalidate(f"stats: {g.user_id}") #added the unique key to be deleted
 
 
 def load_task(task_id):
@@ -136,7 +136,7 @@ def create_task():
          datetime.now(timezone.utc).isoformat()),
     )
     db.commit()
-    invalidate_stats()
+    invalidate_stats() #made sure that the key is removed after the new update in db
     return jsonify(task_to_dict(load_task(cur.lastrowid))), 201
 
 
@@ -210,6 +210,7 @@ def update_task(task_id):
         (title.strip(), slugify(title), status, priority, due_date, task_id),
     )
     db.commit()
+    invalidate_stats()
     return jsonify(task_to_dict(load_task(task_id)))
 
 
