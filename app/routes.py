@@ -217,7 +217,7 @@ def update_task(task_id):
 @login_required
 def delete_task(task_id):
     db = get_db()
-    cur = db.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
+    cur = db.execute("DELETE FROM tasks WHERE id = ? AND owner_id= ?", (task_id, g.user_id)) # owner_id is also added in the codition as it needs to match with the one who wants to delete it
     db.commit()
     if cur.rowcount == 0:
         return error("not found", 404)
