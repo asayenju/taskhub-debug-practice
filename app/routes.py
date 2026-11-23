@@ -161,7 +161,9 @@ def list_tasks():
         sql += " AND status = ?"
         params.append(status)
     if q:
-        sql += f" AND title LIKE '%{q}%'"
+        # SQL injection prevented by first compiling the SQL logic then safely inserting the string into the logic
+        sql += f" AND title LIKE ?"
+        params.append(q)
     sql += " ORDER BY created_at DESC, id DESC"
 
     rows = get_db().execute(sql, params).fetchall()
