@@ -240,7 +240,7 @@ def stats():
         overdue = sum(1 for row in rows if is_overdue(row))
         return {"counts": counts, "overdue": overdue}
 
-    return jsonify(current_app.cache.get_or_compute("stats", compute))
+    return jsonify(current_app.cache.get_or_compute(f"stats: {g.user_id}", compute)) #made sure that the key in the cache is always unique
 
 
 # --------------------------------------------------------------------- webhooks
