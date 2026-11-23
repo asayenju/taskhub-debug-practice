@@ -185,14 +185,14 @@ def update_task(task_id):
     if task is None:
         return error("not found", 404)
     data = request.get_json(silent=True) or {}
-
+    print(data)
     title = data.get("title", task["title"])
     if not isinstance(title, str) or not title.strip():
         return error("title required", 400)
     status = data.get("status", task["status"])
     if status not in VALID_STATUSES:
         return error("invalid status", 400)
-    priority = data.get("priority") or task["priority"]
+    priority = data.get("priority", task["priority"])
     if not valid_priority(priority):
         return error("priority must be an integer from 0 to 5", 400)
     due_date = data.get("due_date", task["due_date"])
