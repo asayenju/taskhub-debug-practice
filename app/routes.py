@@ -116,7 +116,6 @@ def create_task():
     if not isinstance(title, str) or not title.strip():
         return error("title required", 400)
     priority = data.get("priority", 1)
-    print(priority)
     if not valid_priority(priority):
         return error("priority must be an integer from 0 to 5", 400)
     status = data.get("status", "todo")
@@ -166,7 +165,8 @@ def list_tasks():
     sql += " ORDER BY created_at DESC, id DESC"
 
     rows = get_db().execute(sql, params).fetchall()
-    return jsonify(paginate([task_to_dict(r) for r in rows], page, per_page))
+    json = jsonify(paginate([task_to_dict(r) for r in rows], page, per_page))
+    return json
 
 
 @bp.get("/tasks/<int:task_id>")
@@ -185,7 +185,6 @@ def update_task(task_id):
     if task is None:
         return error("not found", 404)
     data = request.get_json(silent=True) or {}
-    print(data)
     title = data.get("title", task["title"])
     if not isinstance(title, str) or not title.strip():
         return error("title required", 400)

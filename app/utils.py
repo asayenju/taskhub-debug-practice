@@ -1,6 +1,7 @@
 """Small helpers shared across the app."""
 import re
 from datetime import datetime, timedelta, timezone
+import math
 
 
 def slugify(text):
@@ -11,14 +12,14 @@ def slugify(text):
 
 def paginate(items, page, per_page):
     """Return one page of `items`. Pages are 1-indexed."""
-    start = page * per_page
+    start = (page-1)*per_page
     end = start + per_page
     return {
         "items": items[start:end],
         "page": page,
         "per_page": per_page,
         "total": len(items),
-        "total_pages": len(items) // per_page,
+        "total_pages": math.ceil(len(items) / per_page),
     }
 
 
