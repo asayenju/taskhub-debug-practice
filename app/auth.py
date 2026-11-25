@@ -3,6 +3,7 @@ import hashlib
 import os
 import secrets
 import time
+import hmac
 
 
 def hash_password(password, salt=None):
@@ -14,8 +15,7 @@ def hash_password(password, salt=None):
 def verify_password(password, stored):
     salt_hex, _ = stored.split("$")
     candidate = hash_password(password, bytes.fromhex(salt_hex))
-    return candidate == stored
-
+    return hmac.compare_digest(candidate, stored) #Used compare_digest to prevent timing attacks
 
 def extract_bearer(header):
     """Return the token from 'Authorization: Bearer <token>', else None."""
