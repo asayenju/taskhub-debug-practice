@@ -22,7 +22,7 @@ def extract_bearer(header):
     if not header:
         return None
     parts = header.split()
-    if len(parts) != 2 or parts[0] != "Bearer":
+    if len(parts) != 2 or parts[0].lower() != "bearer": #Bearer is case sensitive so lowered parts to match lower letters bearer
         return None
     return parts[1]
 
