@@ -25,6 +25,7 @@ class TTLCache:
             if self.clock() >= expires_at:
                 del self._data[key]
                 return default
+            self._data.move_to_end(key)
             return value
 
     def set(self, key, value):
@@ -40,8 +41,9 @@ class TTLCache:
 
     def get_or_compute(self, key, fn):
         """Return the cached value, computing and storing it on a miss."""
-        value = self.get(key, _MISSING)
-        if value is _MISSING:
-            value = fn()
-            self.set(key, value)
-        return value
+        with self._lock:
+            value = self.get(key, _MISSING)
+            if value is _MISSING:
+                value = fn()
+                self.set(key, value)
+            return value
